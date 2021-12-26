@@ -11,9 +11,14 @@ using System.Threading.Tasks;
 
 namespace FundooAppLication.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
-    ///
+    
+    /// <summary>
+    /// It is a class for UserController
+    /// </summary>
+
     public class UserController : ControllerBase
     {
         private readonly IUserBL userBL;
@@ -21,6 +26,11 @@ namespace FundooAppLication.Controllers
         {
             this.userBL = userBL;
         }
+        /// <summary>
+        ///  This method is used for User Registration in the web application
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult UserRegistration(UserRegistration user)
         {
@@ -41,6 +51,11 @@ namespace FundooAppLication.Controllers
             }
 
         }
+        /// <summary>
+        ///  This method is used for User R in the web application
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <returns></returns>
         [HttpPost("login")]
         public IActionResult UserLogin(UserLogin userLogin)
         {
