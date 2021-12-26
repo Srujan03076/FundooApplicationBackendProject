@@ -22,7 +22,7 @@ namespace CommonLayer.Model
         public string FirstName { get; set; }
 
         /// <summary>
-        /// Gets or sets the object named Lastname of the UserRegistration class
+        //// Gets or sets the object named Lastname of the UserRegistration class
         /// </summary>
         [Required(ErrorMessage = "Last name is required")]
         [DataType(DataType.Text)]
