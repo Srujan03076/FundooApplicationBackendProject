@@ -10,6 +10,9 @@ using System.Text;
 
 namespace RepositoryLayer.Services
 {
+    /// <summary>
+    /// This is a UserRL class
+    /// </summary>
     public class UserRL : IUserRL
     {
         FundooContext context;
