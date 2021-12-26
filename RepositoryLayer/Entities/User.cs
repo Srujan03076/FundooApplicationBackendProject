@@ -6,6 +6,9 @@ using System.Text;
 
 namespace RepositoryLayer.Context
 {
+    /// <summary>
+    /// This is a Uer class
+    /// </summary>
     public class User
     {
         [Key]
