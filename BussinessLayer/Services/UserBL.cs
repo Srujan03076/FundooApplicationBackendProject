@@ -9,6 +9,9 @@ using System.Text;
 
 namespace BussinessLayer.Services
 {
+    /// <summary>
+    /// This is a class for UserBL
+    /// </summary>
     public class UserBL : IUserBL
     {
         IUserRL userRL;
