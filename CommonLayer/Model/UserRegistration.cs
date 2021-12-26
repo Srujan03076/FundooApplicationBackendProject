@@ -8,12 +8,12 @@ namespace CommonLayer.Model
    public class UserRegistration
     {
         /// <summary>
-        /// /// Gets or sets the object named Id of the UserRegistration class
+        /// Gets or sets the object named Id of the UserRegistration class
         /// </summary>
         public long Id { get; set; }
 
         /// <summary>
-        /// /// Gets or sets the object named Firstname of the UserRegistration class
+        /// Gets or sets the object named Firstname of the UserRegistration class
         /// </summary>
         /// 
         [Required(ErrorMessage = "First name is required")]
@@ -22,7 +22,7 @@ namespace CommonLayer.Model
         public string FirstName { get; set; }
 
         /// <summary>
-        /// /// Gets or sets the object named Lastname of the UserRegistration class
+        /// Gets or sets the object named Lastname of the UserRegistration class
         /// </summary>
         [Required(ErrorMessage = "Last name is required")]
         [DataType(DataType.Text)]
@@ -30,7 +30,7 @@ namespace CommonLayer.Model
         public string LastName { get; set; }
 
         /// <summary>
-        /// /// Gets or sets the object named EmailId of the UserRegistration class
+        /// Gets or sets the object named EmailId of the UserRegistration class
         /// </summary>
         [Required(ErrorMessage = "EmailId is required")]
         [DataType(DataType.EmailAddress)]
@@ -39,7 +39,7 @@ namespace CommonLayer.Model
         public string EmailId { get; set; }
 
         /// <summary>
-        /// /// Gets or sets the object named Password of the UserRegistration class
+        /// Gets or sets the object named Password of the UserRegistration class
         /// </summary>
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
