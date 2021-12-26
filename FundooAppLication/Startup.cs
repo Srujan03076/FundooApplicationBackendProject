@@ -1,5 +1,6 @@
 using BussinessLayer.Interfaces;
 using BussinessLayer.Services;
+using CommonLayer.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,6 +18,7 @@ using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooAppLication
@@ -38,6 +40,8 @@ namespace FundooAppLication
             services.AddDbContext<RepositoryLayer.Context.FundooContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooDB"]));
             services.AddControllers();
             services.AddSwaggerGen();
+            
+
 
         }
 
