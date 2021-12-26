@@ -8,6 +8,9 @@ using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
+    /// <summary>
+    /// This is a Migration class
+    /// </summary>
     [DbContext(typeof(FundooContext))]
     partial class FundooContextModelSnapshot : ModelSnapshot
     {

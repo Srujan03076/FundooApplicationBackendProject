@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RepositoryLayer.Migrations
 {
+    /// <summary>
+    /// This is Migration class
+    /// </summary>
     public partial class M2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
