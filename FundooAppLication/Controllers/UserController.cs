@@ -52,7 +52,7 @@ namespace FundooAppLication.Controllers
 
         }
         /// <summary>
-        ///  This method is used for User R in the web application
+        ///  This method is used for User Login in the web application
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
