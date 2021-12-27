@@ -7,7 +7,7 @@ using System.Text;
 namespace RepositoryLayer.Context
 {
     /// <summary>
-    /// This is a Uer class
+    /// This is a User class
     /// </summary>
     public class User
     {
