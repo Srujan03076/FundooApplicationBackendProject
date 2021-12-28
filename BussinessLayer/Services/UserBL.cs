@@ -2,6 +2,7 @@
 using CommonLayer.Model;
 using CommonLayer.ResponseModel;
 using CommonLayer.UserModel;
+using RepositoryLayer.Context;
 using RepositoryLayer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,12 @@ namespace BussinessLayer.Services
             this.userRL = userRL;
 
         }
+
+        public IEnumerable<User> GetRegistrations()
+        {
+            return this.userRL.GetRegistrations();
+        }
+
         public bool Registration(UserRegistration user)
         {
             try
