@@ -33,6 +33,10 @@ namespace CommonLayer.ResponseModel
         /// Gets or sets the Modifiedeat and make it nullable
         /// </summary>
         public DateTime? Modifiedat { get; set; }
+        /// <summary>
+        /// Gets or sets the token
+        /// </summary>
+        public string  token { get; set; }
 
     }
 }
