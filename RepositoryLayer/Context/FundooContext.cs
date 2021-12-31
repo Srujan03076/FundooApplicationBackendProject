@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,13 @@ namespace RepositoryLayer.Context
         {
 
         }
-        public DbSet<User> Users{get; set;}
+        public DbSet<User> UserTable { get; set; }
+        public DbSet<Notes> NoteTable { get; set; }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+
+        //    modelBuilder.Entity<Notes>()
+        //        .HasKey(c => new { c.Id });
+        //}
     }
 }
