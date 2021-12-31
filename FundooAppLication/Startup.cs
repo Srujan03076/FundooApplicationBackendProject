@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 
 using RepositoryLayer;
 using RepositoryLayer.Context;
+using RepositoryLayer.Entities;
 using RepositoryLayer.Interfaces;
 using RepositoryLayer.Services;
 using System;
@@ -37,9 +38,15 @@ namespace FundooAppLication
         {
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
+            services.AddTransient<INotesBL, NotesBL>();
+            services.AddTransient<INotesRL, NotesRL>();
             services.AddDbContext<RepositoryLayer.Context.FundooContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:FundooDB"]));
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
         }
 
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
