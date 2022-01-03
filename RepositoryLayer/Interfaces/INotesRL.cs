@@ -6,10 +6,11 @@ using System.Text;
 
 namespace RepositoryLayer.Interfaces
 {
-    public interface INotesRL
+     public interface INotesRL
     {
         public bool MakeANote(UserNotes notes);
         IEnumerable<Notes> GetAllNotesData();
-        public bool DeleteNotes(DeleteNote deletenotes);
+        public bool DeleteNotes(long Id);
+        public UserNotes UpdateNotes(UserNotes usernotes);
     }
 }
