@@ -17,52 +17,37 @@ namespace RepositoryLayer.Services
             this.context = context;
         }
 
-        public bool DeleteNotes(DeleteNote deletenotes)
+        public bool DeleteNotes(long Id )
         {
+            try
             {
-                try
-                {
-                    var ValidNote = this.context.NoteTable.Where(Y => Y.Id == deletenotes.Id).FirstOrDefault();
-                    if (ValidNote != null)
-                    {
-                        Notes deleteNote = new Notes();
-                        deleteNote.Title = ValidNote.Title;
-                        deleteNote.Message = ValidNote.Message;
-                        deleteNote.Remainder = ValidNote.Remainder;
-                        deleteNote.Colour = ValidNote.Colour;
-                        deleteNote.Image = ValidNote.Image;
-                        deleteNote.IsArchive = ValidNote.IsArchive;
-                        deleteNote.IsPin = ValidNote.IsPin;
-                        deleteNote.IsTrash = ValidNote.IsTrash;
-                        deleteNote.Createdat = ValidNote.Createdat;
-                        deleteNote.Modifiedat = ValidNote.Modifiedat;
-                    }
-                    //Deleting user details from the database user table 
-                    this.context.NoteTable.Remove(ValidNote);
+                var ValidNote = this.context.NoteTable.Where(Y => Y.Id ==Id).FirstOrDefault();
+                
+               this.context.NoteTable.Remove(ValidNote);
 
-                    int result = this.context.SaveChanges();
-                    if (result > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception e)
+                int result = this.context.SaveChanges();
+                if (result > 0)
                 {
-                    throw;
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
+
 
         public IEnumerable<Notes> GetAllNotesData()
         {
             return context.NoteTable.ToList();
         }
 
-       
+
 
         public bool MakeANote(UserNotes notes)
         {
@@ -92,23 +77,82 @@ namespace RepositoryLayer.Services
                     return false;
                 }
             }
-
             catch (Exception e)
             {
                 throw;
             }
         }
+
+        public UserNotes UpdateNotes(UserNotes usernotes)
+        {
+
+            var UpdateNote = this.context.NoteTable.Where(Y => Y.Id == usernotes.Id).FirstOrDefault();
+            if (UpdateNote != null)
+            {
+                UpdateNote.Title = usernotes.Title;
+                UpdateNote.Message = usernotes.Message;
+                UpdateNote.Remainder = usernotes.Remainder;
+                UpdateNote.Colour = usernotes.Colour;
+                UpdateNote.Image = usernotes.Image;
+                UpdateNote.IsArchive = usernotes.IsArchive;
+                UpdateNote.IsPin = usernotes.IsPin;
+                UpdateNote.IsTrash = usernotes.IsTrash;
+                UpdateNote.Createdat = usernotes.Createdat;
+
+
+            }
+            var result = this.context.SaveChanges();
+            if (result > 0)
+            {
+                return usernotes;
+            }
+            else
+            {
+                return default;
+            }
+        }
     }
 }
+
+
         
 
-    
-               
-                   
-                
-                   
 
-                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
