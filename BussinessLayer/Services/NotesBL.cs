@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BussinessLayer.Services
 {
-   public class NotesBL : INotesBL
+    public class NotesBL : INotesBL
     {
 
         INotesRL notesRL;
@@ -18,18 +18,18 @@ namespace BussinessLayer.Services
 
         }
 
-        public bool DeleteNotes(DeleteNote deletenotes)
+        public bool DeleteNotes(long Id)
         {
             try
             {
-                return this.notesRL.DeleteNotes(deletenotes);
+                return this.notesRL.DeleteNotes(Id);
             }
             catch (Exception e)
             {
                 throw;
             }
         }
-        
+
         public IEnumerable<Notes> GetAllNotesData()
         {
             return this.notesRL.GetAllNotesData();
@@ -48,6 +48,26 @@ namespace BussinessLayer.Services
 
         }
 
-        
+        public UserNotes UpdateNotes(UserNotes usernotes)
+        {
+            return this.notesRL.UpdateNotes(usernotes);
+        }
     }
 }
+
+
+      
+   
+
+  
+  
+
+
+        
+
+
+        
+
+
+       
+    
