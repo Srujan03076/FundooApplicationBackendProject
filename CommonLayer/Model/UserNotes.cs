@@ -16,10 +16,11 @@ namespace CommonLayer.Model
         public bool IsTrash { get; set; }
         public long Id { get; set; }
         public DateTime? Createdat { get; set; }
-
-
-
-
-
     }
 }
+
+
+
+
+
+
