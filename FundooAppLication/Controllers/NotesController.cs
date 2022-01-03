@@ -1,7 +1,9 @@
 ﻿using BussinessLayer.Interfaces;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,7 @@ namespace FundooAppLication.Controllers
         {
             this.notesBL = notesBL;
         }
+        [Authorize]
         [HttpPost]
         public IActionResult MakeANote(UserNotes notes)
         {
@@ -55,12 +58,33 @@ namespace FundooAppLication.Controllers
                 return this.BadRequest(new { Success = false, message = e.InnerException });
             }
         }
-        [HttpDelete("Delete")]
-        public IActionResult DeleteNotes( DeleteNote deletenotes)
+        [HttpPut("{id}")]
+        public IActionResult UpdateNotes( UserNotes usernotes )
         {
             try
             {
-                if (this.notesBL.DeleteNotes(deletenotes))
+                UserNotes userresponse = notesBL.UpdateNotes(usernotes);
+                if (userresponse != null)
+                    
+                {
+                    return this.Ok(new { Success = true, message = " Updation Succesful", });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Not Successful" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { success = false, message = e.InnerException });
+            }
+        }
+        [HttpDelete("Delete")]
+        public IActionResult DeleteNotes( long Id)
+        {
+            try
+            {
+                if (this.notesBL.DeleteNotes(Id))
                 {
                     return this.Ok(new { Success = true, message = " Registration Deleted" });
                 }
