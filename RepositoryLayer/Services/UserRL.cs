@@ -1,6 +1,8 @@
 ﻿using CommonLayer.Model;
 using CommonLayer.ResponseModel;
 using CommonLayer.UserModel;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Context;
 using RepositoryLayer.Interfaces;
@@ -18,16 +20,19 @@ namespace RepositoryLayer.Services
     /// </summary>
     public class UserRL : IUserRL
     {
-        private const string SecretKey = "This is my sample key ";
+
         FundooContext context;
-        public UserRL(FundooContext context)
+        IConfiguration _config;
+
+        public UserRL(FundooContext _context, IConfiguration _config)
         {
-            this.context = context;
+            this.context = _context;
+            this._config = _config;
         }
 
         public IEnumerable<User> GetRegistrations()
         {
-            return context.Users.ToList();
+            return context.UserTable.ToList();
         }
         /// <summary>
         /// 
@@ -42,11 +47,11 @@ namespace RepositoryLayer.Services
                 newUser.FirstName = user.FirstName;
                 newUser.LastName = user.LastName;
                 newUser.EmailId = user.EmailId;
-                newUser.Password = user.Password;
+                newUser.Password = encryptpass(user.Password);
                 newUser.Createdat = DateTime.Now;
 
 
-                this.context.Users.Add(newUser);
+                this.context.UserTable.Add(newUser);
 
                 int result = this.context.SaveChanges();
                 if (result > 0)
@@ -69,13 +74,13 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
+
         public LoginResponse UserLogin(UserLogin userLogin)
         {
             try
             {
-                var validateLogin = this.context.Users.Where(x => x.EmailId == userLogin.Email && x.Password == userLogin.Password).FirstOrDefault();
-
-                if (validateLogin.Id != 0 && validateLogin.EmailId != null)
+                var validateLogin = this.context.UserTable.Where(x => x.EmailId == userLogin.Email).FirstOrDefault();
+                if (Decryptpass(validateLogin.Password) == userLogin.Password)
                 {
                     LoginResponse login1 = new LoginResponse();
                     string token;
@@ -86,7 +91,7 @@ namespace RepositoryLayer.Services
                     login1.EmailId = validateLogin.EmailId;
                     login1.Createat = validateLogin.Createdat;
                     login1.Modifiedat = validateLogin.Modifiedat;
-                    login1.token =token;
+                    login1.token = token;
                     return login1;
                 }
                 else
@@ -106,20 +111,75 @@ namespace RepositoryLayer.Services
         /// <returns></returns>
         private string GenerateJWTToken(string EmailId)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is my sample key"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[] {
-                new Claim("EmailId",EmailId) 
+                new Claim("EmailId",EmailId)
             };
-                
-             var token = new JwtSecurityToken("Srujan", EmailId, claims,
-              expires: DateTime.Now.AddMinutes(10),
-              signingCredentials: credentials);
-              return new JwtSecurityTokenHandler().WriteToken(token);
+
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+        _config["Jwt:Issuer"],
+        claims,
+        expires: DateTime.Now.AddMinutes(10),
+        signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string encryptpass(string password)
+        {
+            string msg = "";
+            byte[] encode = new byte[password.Length];
+            encode = Encoding.UTF8.GetBytes(password);
+            msg = Convert.ToBase64String(encode);
+            return msg;
+        }
+        private string Decryptpass(string encryptpwd)
+        {
+            string decryptpwd = string.Empty;
+            UTF8Encoding encodepwd = new UTF8Encoding();
+            Decoder Decode = encodepwd.GetDecoder();
+            byte[] todecode_byte = Convert.FromBase64String(encryptpwd);
+            int charCount = Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+            char[] decoded_char = new char[charCount];
+            Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+            decryptpwd = new String(decoded_char);
+            return decryptpwd;
+        }
+
+        public bool ForgotPassword(string EmailId)
+        {
+            var validateLogin = this.context.UserTable.Where(Z => Z.EmailId == EmailId).FirstOrDefault();
+            if (validateLogin.EmailId != null)
+            {
+                var token = GenerateJWTToken(validateLogin.EmailId);
+                new MsmqOperation().Sender(token);
+                return true;
+            }
+            return false;
+        }
+        public bool ResetPassword(SwitchPassword switchPassword)
+        {
+
+            var validateLogin = this.context.UserTable.SingleOrDefault(R => R.EmailId == switchPassword.EmailId);
+            if (validateLogin.EmailId != null)
+            {
+                context.UserTable.Attach(validateLogin);
+                validateLogin.Password = switchPassword.ConfirmPassword;
+                context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
         }
     }
 }
 
+        
 
 
 
@@ -133,4 +193,22 @@ namespace RepositoryLayer.Services
 
 
 
-       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
