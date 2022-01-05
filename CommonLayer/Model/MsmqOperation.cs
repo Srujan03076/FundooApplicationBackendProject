@@ -58,7 +58,7 @@ namespace CommonLayer.Model
                 throw ex;
             }
 
-            // Msmq receiver
+            // msmq receiver
             msmq.BeginReceive();
         }
         public static string JwtDecode(string token)
