@@ -8,7 +8,7 @@ using System.Text;
 
 namespace RepositoryLayer.Interfaces
 {
-    public interface IUserRL
+     public interface IUserRL
     {
         /// <summary>
         /// This methods implements the Registration functionality
@@ -16,8 +16,8 @@ namespace RepositoryLayer.Interfaces
         /// <param name="user"></param>
         /// <returns></returns>
         bool Registration(UserRegistration user);
-        /// <summary>
-        /// This methods implements the Login functionality
+
+       /// This methods implements the Login functionality
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
@@ -27,7 +27,7 @@ namespace RepositoryLayer.Interfaces
         /// </summary>
         /// <returns></returns>
         IEnumerable<User> GetRegistrations();
-
-
+       bool ForgotPassword(string EmailId);
+       bool ResetPassword(SwitchPassword switchPassword);
     }
 }
