@@ -34,7 +34,7 @@ namespace CommonLayer.Model
             string token = msg.Body.ToString();
             // mail sending code smtp 
             string mailReceiver = JwtDecode(token).ToString();
-            MailMessage message = new MailMessage("srujantesting123@gmail.com", mailReceiver);
+            MailMessage message = new MailMessage("srujantesting123@gmail.com", "srujanmahaja5@gmail.com");
             string bodymessage = "for reset click here <a href='https://localhost:44320/api/User/GetAllUserdetails'> click me</a>" +
                 "copy the token Provided here : " + token;
 
