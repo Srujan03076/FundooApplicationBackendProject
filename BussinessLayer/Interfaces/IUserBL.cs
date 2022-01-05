@@ -24,11 +24,24 @@ namespace BussinessLayer.Interfaces
         /// <returns></returns>
         LoginResponse UserLogin(UserLogin userLogin);
         /// <summary>
-        /// 
+        /// This methods show all the data 
         /// </summary>
         /// <returns></returns>
         IEnumerable<User> GetRegistrations();
+        /// <summary>
+        ///  Forgot password method performs sending mail to user,for creating new password
+        /// </summary>
+        /// <param name="EmailId"></param>
+        /// <returns></returns>
+        bool ForgotPassword(string EmailId);
+        /// <summary>
+        /// This methods implements the ResetPassword functionality
+        /// </summary>
+        /// <param name="switchPassword"></param>
+        /// <returns></returns>
+        bool ResetPassword(SwitchPassword switchPassword);
 
+        
 
     }
 }
