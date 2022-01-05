@@ -22,6 +22,8 @@ namespace BussinessLayer.Services
 
         }
 
+
+
         public IEnumerable<User> GetRegistrations()
         {
             return this.userRL.GetRegistrations();
@@ -37,9 +39,8 @@ namespace BussinessLayer.Services
             {
                 throw;
             }
-            
-        }
 
+        }
         public LoginResponse UserLogin(UserLogin userLogin)
         {
             {
@@ -54,5 +55,40 @@ namespace BussinessLayer.Services
 
             }
         }
+
+        public bool ForgotPassword(string EmailId)
+        {
+            {
+                try
+                {
+                    return this.userRL.ForgotPassword(EmailId);
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
+
+            }
+
+        }
+
+        public bool ResetPassword(SwitchPassword switchPassword)
+        {
+            try
+            {
+                return this.userRL.ResetPassword(switchPassword);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }
+
+            
+        
+       
+
+  
+
