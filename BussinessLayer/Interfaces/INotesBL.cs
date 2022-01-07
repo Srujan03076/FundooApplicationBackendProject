@@ -11,7 +11,13 @@ namespace BussinessLayer.Interfaces
         public bool MakeANote(UserNotes notes);
         IEnumerable<Notes> GetAllNotesData();
         public bool DeleteNotes(long Id);
-         UserNotes UpdateNotes(UserNotes usernotes);
+        UserNotes UpdateNotes(UserNotes usernotes);
+        public bool NoteAddtionAsPinned(int notesId, long id);
+        public bool Trash(int notesId);
+        public bool IsArchive(int notesId);
+        public bool EditColour(int notesId, string colour);
+        public bool UnArchive(int notesId);
+        public bool RestoreTrash(int notesId);
     }
 }
         
