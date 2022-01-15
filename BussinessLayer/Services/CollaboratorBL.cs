@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BussinessLayer.Services
 {
-   public class CollaboratorBL : ICollaboratorBL
+    public class CollaboratorBL : ICollaboratorBL
     {
         ICollaboratorRL collaboratorRL;
         public CollaboratorBL(ICollaboratorRL collaboratorRL)
@@ -18,16 +18,15 @@ namespace BussinessLayer.Services
         }
         public CollabModel AddCollab(CollabModel collaboration, long tokenId)
         {
-                try
-                {
-                    return this.collaboratorRL.AddCollab(collaboration, tokenId);
-                }
-                catch (Exception e)
-                {
-                    throw;
-                }
-
+            try
+            {
+                return this.collaboratorRL.AddCollab(collaboration, tokenId);
             }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
         public bool Deletecollab(CollabModel model)
         {
             try
@@ -40,11 +39,12 @@ namespace BussinessLayer.Services
             }
 
         }
-
         public IEnumerable<Collaborator> GetCollaborator()
         {
             return this.collaboratorRL.GetCollaborator();
         }
-
     }
 }
+
+    
+
