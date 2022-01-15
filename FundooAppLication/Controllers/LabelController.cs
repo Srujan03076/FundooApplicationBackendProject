@@ -32,8 +32,8 @@ namespace FundooAppLication.Controllers
                 var result = this.labelBL.MakeALabel(labelModel);
                 if (result != null)
                 {
-                    
-                    return Ok(new { Success = true, message = "Label added Successfully", Data=labelModel });
+
+                    return Ok(new { Success = true, message = "Label added Successfully", Data = labelModel });
                 }
                 else
                 {
@@ -76,15 +76,15 @@ namespace FundooAppLication.Controllers
         /// <param name="labelModel"></param>
         /// <returns></returns>
         [HttpPut("{labelId}/EditLabel")]
-        
+
         public IActionResult EditLabel(long labelId, LabelModel labelModel)
         {
             try
             {
                 var result = this.labelBL.EditLabel(labelId, labelModel);
-                if (result !=null)
+                if (result != null)
                 {
-                    return Ok(new { Success = true, message = "Label changed Successfully", Data= labelModel });
+                    return Ok(new { Success = true, message = "Label changed Successfully", Data = labelModel });
                 }
                 else
                 {
@@ -122,6 +122,8 @@ namespace FundooAppLication.Controllers
                 return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-
     }
 }
+
+    
+
