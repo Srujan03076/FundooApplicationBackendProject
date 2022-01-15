@@ -30,13 +30,11 @@ namespace RepositoryLayer.Entities
         public bool IsTrash { get; set; }
         public DateTime? Createdat { get; set; }
         public DateTime? Modifiedat { get; set; }
-        //[Required]
-        //[ForeignKey("UserTable")]
-        public User User { get; set; }
-
-        [ForeignKey("User")]
-       public long Id { get; set; }
+        public long Id { get; set; }
+        public ICollection<Collaborator> Collaborator { get; set; }
+        public ICollection<Label> Label { get; set; }
     }
+    
 }
       
 
