@@ -15,7 +15,7 @@ namespace BussinessLayer.Interfaces
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        bool Registration(UserRegistration user);
+        public bool Registration(UserRegistration user);
 
         /// <summary>
         /// This methods implements the Login functionality
@@ -33,13 +33,13 @@ namespace BussinessLayer.Interfaces
         /// </summary>
         /// <param name="EmailId"></param>
         /// <returns></returns>
-        bool ForgotPassword(string EmailId);
+        public bool ForgotPassword(string EmailId);
         /// <summary>
         /// This methods implements the ResetPassword functionality
         /// </summary>
         /// <param name="switchPassword"></param>
         /// <returns></returns>
-        bool ResetPassword(SwitchPassword switchPassword);
+        public bool ResetPassword(SwitchPassword switchPassword);
 
         
 
