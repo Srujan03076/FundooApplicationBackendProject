@@ -74,7 +74,7 @@ namespace RepositoryLayer.Services
             }
         }
         /// <summary>
-        /// To check the EmailId, password & Get Login
+        /// To check the EmailId, password and Get Login
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
