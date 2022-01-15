@@ -38,7 +38,6 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
-
         public IEnumerable<Label> Getlabels()
         {
             return this.labelRL.Getlabels();
