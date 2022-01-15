@@ -16,8 +16,8 @@ namespace RepositoryLayer.Interfaces
         /// <param name="user"></param>
         /// <returns></returns>
         bool Registration(UserRegistration user);
-
-       /// This methods implements the Login functionality
+        /// <summary>
+        /// This methods implements the Login functionality
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
@@ -27,7 +27,17 @@ namespace RepositoryLayer.Interfaces
         /// </summary>
         /// <returns></returns>
         IEnumerable<User> GetRegistrations();
-       bool ForgotPassword(string EmailId);
-       bool ResetPassword(SwitchPassword switchPassword);
+        /// <summary>
+        /// This methods implements forgot password functionality
+        /// </summary>
+        /// <param name="EmailId"></param>
+        /// <returns></returns>
+        bool ForgotPassword(string EmailId);
+        /// <summary>
+        /// This methods implements reset password functionality
+        /// </summary>
+        /// <param name="switchPassword"></param>
+        /// <returns></returns>
+        bool ResetPassword(SwitchPassword switchPassword);
     }
 }
