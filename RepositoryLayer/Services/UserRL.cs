@@ -29,13 +29,17 @@ namespace RepositoryLayer.Services
             this.context = _context;
             this._config = _config;
         }
+        /// <summary>
+        /// This method implements getting all the user data from database
+        /// </summary>
+        /// <returns></returns>
 
         public IEnumerable<User> GetRegistrations()
         {
             return context.UserTable.ToList();
         }
         /// <summary>
-        /// 
+        /// This method implements registraton of user
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -74,8 +78,7 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
-
-        public LoginResponse UserLogin(UserLogin userLogin)
+         public LoginResponse UserLogin(UserLogin userLogin)
         {
             try
             {
@@ -84,7 +87,7 @@ namespace RepositoryLayer.Services
                 {
                     LoginResponse login1 = new LoginResponse();
                     string token;
-                    token = GenerateJWTToken(validateLogin.EmailId);
+                    token = GenerateJWTToken(validateLogin.EmailId,validateLogin.Id);
                     login1.Id = validateLogin.Id;
                     login1.FirstName = validateLogin.FirstName;
                     login1.LastName = validateLogin.LastName;
@@ -109,12 +112,13 @@ namespace RepositoryLayer.Services
         /// </summary>
         /// <param name="EmailId"></param>
         /// <returns></returns>
-        private string GenerateJWTToken(string EmailId)
+        private string GenerateJWTToken(string EmailId,long Id)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[] {
-                new Claim("EmailId",EmailId)
+                new Claim("EmailId",EmailId),
+                new Claim("Id",Id.ToString())
             };
 
 
@@ -126,7 +130,11 @@ namespace RepositoryLayer.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
+        /// <summary>
+        /// This method implements encryption of password 
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public string encryptpass(string password)
         {
             string msg = "";
@@ -135,6 +143,11 @@ namespace RepositoryLayer.Services
             msg = Convert.ToBase64String(encode);
             return msg;
         }
+        /// <summary>
+        /// This method implements decryption of password 
+        /// </summary>
+        /// <param name="encryptpwd"></param>
+        /// <returns></returns>
         private string Decryptpass(string encryptpwd)
         {
             string decryptpwd = string.Empty;
@@ -147,18 +160,27 @@ namespace RepositoryLayer.Services
             decryptpwd = new String(decoded_char);
             return decryptpwd;
         }
-
+        /// <summary>
+        /// This method implements forgot password  
+        /// </summary>
+        /// <param name="EmailId"></param>
+        /// <returns></returns>
         public bool ForgotPassword(string EmailId)
         {
             var validateLogin = this.context.UserTable.Where(Z => Z.EmailId == EmailId).FirstOrDefault();
             if (validateLogin.EmailId != null)
             {
-                var token = GenerateJWTToken(validateLogin.EmailId);
+                var token = GenerateJWTToken(validateLogin.EmailId,validateLogin.Id);
                 new MsmqOperation().Sender(token);
                 return true;
             }
             return false;
         }
+        /// <summary>
+        /// This method implements reset password 
+        /// </summary>
+        /// <param name="switchPassword"></param>
+        /// <returns></returns>
         public bool ResetPassword(SwitchPassword switchPassword)
         {
 
