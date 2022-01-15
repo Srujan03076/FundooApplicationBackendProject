@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RepositoryLayer.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -41,6 +42,7 @@ namespace RepositoryLayer.Context
 
         [DataType(DataType.DateTime)]
         public DateTime? Modifiedat { get; set; }
+       public ICollection<Collaborator> Collaborator { get; set; }
 
     }
 }
