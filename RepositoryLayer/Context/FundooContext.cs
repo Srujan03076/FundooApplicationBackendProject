@@ -17,11 +17,25 @@ namespace RepositoryLayer.Context
         }
         public DbSet<User> UserTable { get; set; }
         public DbSet<Notes> NoteTable { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-
-        //    modelBuilder.Entity<Notes>()
-        //        .HasKey(c => new { c.Id });
-        //}
+        public DbSet<Collaborator> CollaborationTable { get; set; }
+        public DbSet<Label> LabelTable { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Collaborator>()
+                .HasKey(e => new { e.NotesId, e.Id });
+            modelBuilder.Entity<Collaborator>()
+                .HasOne(e => e.notes)
+                .WithMany(e => e.Collaborator)
+                .HasForeignKey(e => e.NotesId);
+            modelBuilder.Entity<Collaborator>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.Collaborator)
+                .HasForeignKey(e => e.Id);
+        }
     }
 }
+
+
+
+
+    
