@@ -53,7 +53,6 @@ namespace RepositoryLayer.Services
 
             }
         }
-
         /// <summary>
         /// This method implements deletion of collaborator from notes 
         /// </summary>
