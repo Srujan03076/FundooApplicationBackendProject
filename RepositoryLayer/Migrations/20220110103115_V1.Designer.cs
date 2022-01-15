@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(FundooContext))]
-    partial class FundooContextModelSnapshot : ModelSnapshot
+    [Migration("20220110103115_V1")]
+    partial class V1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,13 +58,7 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("RepositoryLayer.Entities.Collaborator", b =>
                 {
-                    b.Property<int>("NotesId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CollaboratorID")
+                    b.Property<long>("CollaborationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -70,36 +66,19 @@ namespace RepositoryLayer.Migrations
                     b.Property<string>("EmailId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("NotesId", "Id");
-
-                    b.HasAlternateKey("CollaboratorID");
-
-                    b.HasIndex("Id");
-
-                    b.ToTable("CollaborationTable");
-                });
-
-            modelBuilder.Entity("RepositoryLayer.Entities.Label", b =>
-                {
-                    b.Property<long>("LabelId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("LabelName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("NotesId")
                         .HasColumnType("int");
 
-                    b.HasKey("LabelId");
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CollaborationId");
 
                     b.HasIndex("NotesId");
 
-                    b.ToTable("LabelTable");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CollaborationTable");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entities.Notes", b =>
@@ -148,30 +127,32 @@ namespace RepositoryLayer.Migrations
 
                     b.HasKey("NotesId");
 
+                    b.HasIndex("Id");
+
                     b.ToTable("NoteTable");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entities.Collaborator", b =>
                 {
-                    b.HasOne("RepositoryLayer.Context.User", "User")
-                        .WithMany("Collaborator")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RepositoryLayer.Entities.Notes", "notes")
+                    b.HasOne("RepositoryLayer.Entities.Notes", "Notes")
                         .WithMany("Collaborator")
                         .HasForeignKey("NotesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RepositoryLayer.Context.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RepositoryLayer.Entities.Label", b =>
+            modelBuilder.Entity("RepositoryLayer.Entities.Notes", b =>
                 {
-                    b.HasOne("RepositoryLayer.Entities.Notes", "notes")
-                        .WithMany("Label")
-                        .HasForeignKey("NotesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("RepositoryLayer.Context.User", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
