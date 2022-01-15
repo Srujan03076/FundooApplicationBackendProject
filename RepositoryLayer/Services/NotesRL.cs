@@ -1,4 +1,7 @@
-﻿using CommonLayer.Model;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entities;
 using RepositoryLayer.Interfaces;
@@ -16,7 +19,11 @@ namespace RepositoryLayer.Services
         {
             this.context = context;
         }
-
+        /// <summary>
+        /// This method implements deletion of notes   
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public bool DeleteNotes(long Id)
         {
             try
@@ -40,10 +47,19 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+        /// <summary>
+        /// This method implements getting all the data from notes  
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Notes> GetAllNotesData()
         {
             return context.NoteTable.ToList();
         }
+        /// <summary>
+        /// This method sending the data in archive from notes
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
 
         public bool IsArchive(int notesId)
         {
@@ -67,8 +83,12 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
-        public bool MakeANote(UserNotes notes)
+        /// <summary>
+        /// This method implements creation of notes 
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
+        public UserNotes MakeANote(UserNotes notes)
         {
             try
             {
@@ -89,11 +109,11 @@ namespace RepositoryLayer.Services
                 int result = this.context.SaveChanges();
                 if (result > 0)
                 {
-                    return true;
+                    return notes;
                 }
                 else
                 {
-                    return false;
+                    return notes;
                 }
             }
             catch (Exception e)
@@ -101,7 +121,12 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
+        /// <summary>
+        ///  This method implements the procces of pinning the notes
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool NoteAdditionAsPinned(int notesId, long id)
         {
             try
@@ -135,7 +160,11 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
+        /// <summary>
+        /// This mothod sending the data into trash
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
         public bool Trash(int notesId)
         {
             try
@@ -164,7 +193,11 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
+        /// <summary>
+        /// This method implements updation proccess in notes 
+        /// </summary>
+        /// <param name="usernotes"></param>
+        /// <returns></returns>
         public UserNotes UpdateNotes(UserNotes usernotes)
         {
 
@@ -193,6 +226,12 @@ namespace RepositoryLayer.Services
                 return default;
             }
         }
+        /// <summary>
+        /// This method implements changing of colour in notes 
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="colour"></param>
+        /// <returns></returns>
         public bool EditColour(int notesId, string colour)
         {
             try
@@ -219,7 +258,11 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
+        /// <summary>
+        /// This method unarchiving the data from notes 
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
         public bool UnArchive(int notesId)
         {
             try
@@ -246,12 +289,16 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
+        /// <summary>
+        /// This method implements restore trash from notes 
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
         public bool RestoreTrash(int notesId)
         {
             try
             {
-                var restoreTrash = this.context.NoteTable.FirstOrDefault(e => e.NotesId == notesId );
+                var restoreTrash = this.context.NoteTable.FirstOrDefault(e => e.NotesId == notesId);
 
                 if (restoreTrash != null)
                 {
@@ -259,12 +306,12 @@ namespace RepositoryLayer.Services
                 }
                 int result = this.context.SaveChanges();
 
-                if (result > 0) 
-                { 
+                if (result > 0)
+                {
                     return true;
                 }
-                else 
-                { 
+                else
+                {
                     return false;
                 }
             }
@@ -273,8 +320,48 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
+        /// <summary>
+        /// This method implements adding image into notes 
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool AddImage(long notesId, IFormFile path)
+        {
+            try
+            { 
+                 var validNoteId = this.context.NoteTable.Where(x => x.NotesId == notesId).FirstOrDefault();
+                    if (validNoteId != null)
+                    {
+                        var cloudinary = new Cloudinary(new Account("diadzu9qx","866372769427445","kKNXAFxlGIDX3Z_74Z94C4fwIZg"));
+
+                        var uploadImage = new ImageUploadParams()
+                        {
+                            File = new FileDescription(path.FileName, path.OpenReadStream())
+                        };
+                        var uploadResult = cloudinary.Upload(uploadImage);
+                        var uploadPath = uploadResult.Url;
+                        validNoteId.Image = uploadPath.ToString();
+                        this.context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                catch (Exception e)
+                {
+                throw;
+                }
+            }
+        }
     }
-}
+
+
+    
+
 
     
 
