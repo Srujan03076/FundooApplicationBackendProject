@@ -21,14 +21,10 @@ namespace BussinessLayer.Services
             this.userRL = userRL;
 
         }
-
-
-
         public IEnumerable<User> GetRegistrations()
         {
             return this.userRL.GetRegistrations();
         }
-
         public bool Registration(UserRegistration user)
         {
             try
@@ -55,7 +51,6 @@ namespace BussinessLayer.Services
 
             }
         }
-
         public bool ForgotPassword(string EmailId)
         {
             {
@@ -71,7 +66,6 @@ namespace BussinessLayer.Services
             }
 
         }
-
         public bool ResetPassword(SwitchPassword switchPassword)
         {
             try
