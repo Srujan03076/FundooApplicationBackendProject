@@ -1,13 +1,20 @@
 ﻿using BussinessLayer.Interfaces;
+using BussinessLayer.Services;
 using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
+using RepositoryLayer.Context;
 using RepositoryLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace FundooAppLication.Controllers
 {
@@ -16,19 +23,30 @@ namespace FundooAppLication.Controllers
     public class NotesController : ControllerBase
     {
         private readonly INotesBL notesBL;
-        public NotesController(INotesBL notesBL)
+        private readonly IMemoryCache memoryCache;
+        private readonly FundooContext context;
+        private readonly IDistributedCache distributedCache;
+        public NotesController(INotesBL notesBL, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.notesBL = notesBL;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
+        /// <summary>
+        /// API for creating the notes in the web application
+        /// </summary>
+        /// <param name="notes"></param>
+        /// <returns></returns>
         [Authorize]
-        [HttpPost]
+        [HttpPost("MakeANote")]
         public IActionResult MakeANote(UserNotes notes)
         {
             try
             {
-                if (this.notesBL.MakeANote(notes))
+                var result = this.notesBL.MakeANote(notes);
+                if (result != null)
                 {
-                    return this.Ok(new { Success = true, message = "New note created successfully " });
+                    return this.Ok(new { Success = true, message = "New note created successfully ", Data = notes });
                 }
                 else
                 {
@@ -38,11 +56,15 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
+        /// <summary>
+        /// API for getting all the data from database in the web application
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
-        [HttpGet("getalldata")]
+        [HttpGet("GetNotesData")]
         public IActionResult GetAllNotesData()
         {
             try
@@ -56,10 +78,16 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-        [HttpPut("Update")]
+        /// <summary>
+        /// API for updating the data in notes in the web application
+        /// </summary>
+        /// <param name="usernotes"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("UpdateNotes")]
         public IActionResult UpdateNotes(UserNotes usernotes)
         {
             try
@@ -77,10 +105,16 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-        [HttpDelete("Delete")]
+        /// <summary>
+        /// API for deleting the notes in the web application
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{Id}/DeleteNotes")]
         public IActionResult DeleteNotes(long Id)
         {
             try
@@ -96,15 +130,21 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-        [HttpPut("Archive")]
+        /// <summary>
+        /// API for archiving the note in the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{notesId}/Archive")]
         public IActionResult IsArchive(int notesId)
         {
             try
             {
-                 var result = this.notesBL.IsArchive(notesId);
+                var result = this.notesBL.IsArchive(notesId);
                 if (result == true)
                 {
                     return Ok(new { Success = true, message = "Note archived Successfully." });
@@ -116,11 +156,16 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-        [HttpPut("Unarchive")]
-  
+        /// <summary>
+        /// API unarchiving the note in the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{notesId}/Unarchive")]
         public IActionResult Unarchive(int notesId)
         {
             try
@@ -137,11 +182,17 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-
-        [HttpPut("Pinnote")]
+        /// <summary>
+        /// API for pinning the notes in the web application 
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{notesId}/Pin")]
         public IActionResult NoteAddtionAsPinned(int notesId, long id)
         {
             try
@@ -158,11 +209,16 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-
-        [HttpDelete("Trash")]
+        /// <summary>
+        ///  API for sending the data into trash in the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{notesId}/Trash")]
         public IActionResult Trash(int notesId)
         {
             try
@@ -179,13 +235,16 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-            
-        
-
-        [HttpPut("RestoreTrash")]
+        /// <summary>
+        /// API for restore note from trash in the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{notesId}/RestoreTrash")]
         public IActionResult RestoreTrash(int notesId)
         {
             try
@@ -202,12 +261,17 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
-
-
-        [HttpPut("ChangeColour")]
+        /// <summary>
+        ///API for changing the color in notes the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="colour"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPut("{notesId}/ChangeColour")]
         public IActionResult EditColour(int notesId, string colour)
         {
 
@@ -225,8 +289,59 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { success = false, message = e.InnerException }); ;
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
+        }
+        /// <summary>
+        /// API for adding Images in notes in the web application
+        /// </summary>
+        /// <param name="notesId"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{notesId}/Image")]
+        public IActionResult AddImage(long notesId, IFormFile path)
+        {
+            try
+            {
+                var result = this.notesBL.AddImage(notesId, path);
+                if (result == true)
+                {
+                    return this.Ok(new { Status = true, Message = "Image added sucessfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Image not added" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
+            }
+        }
+        [HttpGet("GetAllNotesUsingRedisCache")]
+        public async Task<IActionResult> GetAllNotesUsingRedisCache()
+        {
+            var cacheKey = "NoteList";
+            string serializedNotesList;
+            var NoteList = new List<Notes>();
+            var redisNotesList = await distributedCache.GetAsync(cacheKey);
+            if (redisNotesList != null)
+            {
+                serializedNotesList = Encoding.UTF8.GetString(redisNotesList);
+                NoteList = JsonConvert.DeserializeObject<List<Notes>>(serializedNotesList);
+            }
+            else
+            {
+                NoteList = (List<Notes>)notesBL.GetAllNotesData();
+                serializedNotesList = JsonConvert.SerializeObject(NoteList);
+                redisNotesList = Encoding.UTF8.GetBytes(serializedNotesList);
+
+
+            }
+            return Ok(NoteList);
+
+
         }
     }
 }
