@@ -319,6 +319,10 @@ namespace FundooAppLication.Controllers
                 return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
+        /// <summary>
+        /// API for getting all the data in with the help of redis cache
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetAllNotesUsingRedisCache")]
         public async Task<IActionResult> GetAllNotesUsingRedisCache()
         {
