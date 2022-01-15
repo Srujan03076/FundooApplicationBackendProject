@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Interfaces;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entities;
 using RepositoryLayer.Interfaces;
 using System;
@@ -10,14 +11,12 @@ namespace BussinessLayer.Services
 {
     public class NotesBL : INotesBL
     {
-
         INotesRL notesRL;
         public NotesBL(INotesRL notesRL)
         {
             this.notesRL = notesRL;
 
         }
-
         public bool DeleteNotes(long Id)
         {
             try
@@ -29,14 +28,21 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
-
-
-
         public IEnumerable<Notes> GetAllNotesData()
         {
             return this.notesRL.GetAllNotesData();
         }
-
+        public UserNotes MakeANote(UserNotes notes)
+        {
+            try
+            {
+                return this.notesRL.MakeANote(notes);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
         public bool IsArchive(int notesId)
         {
             try
@@ -47,19 +53,6 @@ namespace BussinessLayer.Services
             {
                 throw;
             }
-        }
-
-        public bool MakeANote(UserNotes notes)
-        {
-            try
-            {
-                return this.notesRL.MakeANote(notes);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-
         }
         public bool NoteAddtionAsPinned(int notesId, long id)
         {
@@ -72,7 +65,6 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
-
         public bool Trash(int notesId)
         {
             try
@@ -99,7 +91,6 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
-
         public bool UnArchive(int notesId)
         {
             try
@@ -111,7 +102,6 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
-
         public bool RestoreTrash(int notesId)
         {
             try
@@ -123,8 +113,23 @@ namespace BussinessLayer.Services
                 throw;
             }
         }
+        public bool AddImage(long notesId, IFormFile path)
+        {
+            try
+            {
+                return notesRL.AddImage(notesId, path);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }
+
+       
+    
+
 
 
 
