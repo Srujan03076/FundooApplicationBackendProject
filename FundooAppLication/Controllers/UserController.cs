@@ -29,11 +29,11 @@ namespace FundooAppLication.Controllers
             this.userBL = userBL;
         }
         /// <summary>
-        ///  This method is used for User Registration in the web application
+        /// API for user registration in the web application
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Register")]
         public IActionResult UserRegistration(UserRegistration user)
         {
             try
@@ -49,17 +49,17 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.Message });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
 
         }
         /// <summary>
-        /// This method is used for get all the data of user in the web application
+        /// API for getting all the data from database in the web application
         /// </summary>
         /// <returns></returns>
         //[Authorize]
         [AllowAnonymous]
-        [HttpGet("GetAllUserdetails")]
+        [HttpGet("GetRegistrations")]
         public IActionResult GetRegistrations()
         {
             try
@@ -73,15 +73,15 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.Message });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
         /// <summary>
-        ///  This method is used for User Login in the web application
+        /// API for user login in the web application
         /// </summary>
         /// <param name="userLogin"></param>
         /// <returns></returns>
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public IActionResult UserLogin(UserLogin userLogin)
         {
             try
@@ -95,10 +95,15 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.Message });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException }); ;
             }
 
         }
+        /// <summary>
+        /// API for forgot password in the web application
+        /// </summary>
+        /// <param name="EmailId"></param>
+        /// <returns></returns>
         [HttpPost("Forgotpassword")]
         public IActionResult ForgotPassword(string EmailId)
         {
@@ -120,9 +125,14 @@ namespace FundooAppLication.Controllers
 
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.Message });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
+        /// <summary>
+        /// API for reset password in the web application
+        /// </summary>
+        /// <param name="switchPassword"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost("ResetPassword")]
 
@@ -141,7 +151,7 @@ namespace FundooAppLication.Controllers
             }
             catch (Exception e)
             {
-                return this.BadRequest(new { Success = false, message = e.Message });
+                return this.BadRequest(new { Success = false, message = e.Message, InnerException = e.InnerException });
             }
         }
     }
