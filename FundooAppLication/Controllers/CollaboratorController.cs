@@ -25,7 +25,7 @@ namespace FundooAppLication.Controllers
         /// <param name="collab"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("AddCollab")]
+        [HttpPost]
         public IActionResult AddCollab(CollabModel collaboration)
         {
             try
@@ -51,7 +51,8 @@ namespace FundooAppLication.Controllers
         /// API for Getting all data
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetCollaborator")]
+        [Authorize]
+        [HttpGet]
         public IActionResult GetCollaborator()
         {
             try
@@ -77,7 +78,8 @@ namespace FundooAppLication.Controllers
         /// <param name="notesId"></param>
         /// <param name="emailId"></param>
         /// <returns></returns>
-        [HttpDelete("DeleteCollab")]
+        [Authorize]
+        [HttpDelete]
         public IActionResult Deletecollab(CollabModel model)
         {
             try
