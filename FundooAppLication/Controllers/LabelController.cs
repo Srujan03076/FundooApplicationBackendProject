@@ -1,5 +1,6 @@
 ﻿using BussinessLayer.Interfaces;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,7 +25,8 @@ namespace FundooAppLication.Controllers
         /// <param name="notesId"></param>
         /// <param name="labelModel"></param>
         /// <returns></returns>
-        [HttpPost("MakeALabel")]
+        [Authorize]
+        [HttpPost]
         public IActionResult MakeALabel(LabelModel labelModel)
         {
             try
@@ -49,7 +51,8 @@ namespace FundooAppLication.Controllers
         /// API for getting all the labels from database in the web application
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetLabels")]
+        [Authorize]
+        [HttpGet]
         public IActionResult Getlabels()
         {
             try
@@ -75,6 +78,8 @@ namespace FundooAppLication.Controllers
         /// <param name="labelId"></param>
         /// <param name="labelModel"></param>
         /// <returns></returns>
+        /// 
+        [Authorize]
         [HttpPut("{labelId}/EditLabel")]
 
         public IActionResult EditLabel(long labelId, LabelModel labelModel)
@@ -101,7 +106,8 @@ namespace FundooAppLication.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpDelete("DeleteLabel")]
+        [Authorize]
+        [HttpDelete]
         public IActionResult DeleteLabel(LabelModel model)
         {
             try
