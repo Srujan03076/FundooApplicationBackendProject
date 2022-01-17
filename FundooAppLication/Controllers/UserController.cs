@@ -33,7 +33,7 @@ namespace FundooAppLication.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        [HttpPost("Register")]
+        [HttpPost]
         public IActionResult UserRegistration(UserRegistration user)
         {
             try
@@ -59,7 +59,7 @@ namespace FundooAppLication.Controllers
         /// <returns></returns>
         //[Authorize]
         [AllowAnonymous]
-        [HttpGet("GetRegistrations")]
+        [HttpGet]
         public IActionResult GetRegistrations()
         {
             try
@@ -104,7 +104,7 @@ namespace FundooAppLication.Controllers
         /// </summary>
         /// <param name="EmailId"></param>
         /// <returns></returns>
-        [HttpPost("Forgotpassword")]
+        [HttpPost("{emailId}/Forgotpassword")]
         public IActionResult ForgotPassword(string EmailId)
         {
             if (string.IsNullOrEmpty(EmailId))
