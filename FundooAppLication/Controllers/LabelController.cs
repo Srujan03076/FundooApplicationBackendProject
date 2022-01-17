@@ -80,7 +80,7 @@ namespace FundooAppLication.Controllers
         /// <returns></returns>
         /// 
         [Authorize]
-        [HttpPut("{labelId}/EditLabel")]
+        [HttpPut("{labelId}/EditLabels")]
 
         public IActionResult EditLabel(long labelId, LabelModel labelModel)
         {
