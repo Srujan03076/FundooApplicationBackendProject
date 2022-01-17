@@ -38,7 +38,7 @@ namespace FundooAppLication.Controllers
         /// <param name="notes"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("MakeANote")]
+        [HttpPost]
         public IActionResult MakeANote(UserNotes notes)
         {
             try
@@ -64,7 +64,7 @@ namespace FundooAppLication.Controllers
         /// </summary>
         /// <returns></returns>
         [Authorize]
-        [HttpGet("GetNotesData")]
+        [HttpGet]
         public IActionResult GetAllNotesData()
         {
             try
@@ -344,11 +344,14 @@ namespace FundooAppLication.Controllers
 
             }
             return Ok(NoteList);
-
-
         }
     }
 }
+
+
+       
+    
+
 
 
 
